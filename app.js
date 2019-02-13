@@ -42,9 +42,6 @@
 
             var user = state.filteredUsers[state.modalUserIndex];
 
-            // Make the date of birth human readable
-            var d = user.dob.slice(0, 10).split('-');
-
             modalContent.innerHTML =
                 `<div>
                 <span id="close" class="close">&times</span>
