@@ -53,7 +53,7 @@
                     <div class="email">${user.email}</div>
                     <hr/>
                     <div>${user.phone}</div>
-                    <div>${user.location.street}, ${user.location.city}, ${user.location.postcode}, ${user.nat}</div>\
+                    <div>${user.location.street}, ${user.location.city}, ${user.location.postcode}, ${user.nat}</div>
                     <div>Birthday:  ${d[1]}/${d[2]}/${d[0]}</div>
                     <hr/>
                     <div><span class="previous">&larr; previous     |</span>
