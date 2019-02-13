@@ -42,8 +42,8 @@
 
             var user = state.filteredUsers[state.modalUserIndex];
 
-             // Make the DOB readable
-            var d = user.dob.slice(0, 10).split('-');
+            // Make the DOB readable
+            user.dob[‘date’].slice
 
             modalContent.innerHTML =
                 `<div>
