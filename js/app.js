@@ -42,7 +42,7 @@
 
             var user = state.filteredUsers[state.modalUserIndex];
 
-            // Make the date of birth human readable
+             // Make the DOB readable
             var d = user.dob.slice(0, 10).split('-');
 
             modalContent.innerHTML =
@@ -56,7 +56,7 @@
                     <div class="email">${user.email}</div>
                     <hr/>
                     <div>${user.phone}</div>
-                    <div>${user.location.street}, ${user.location.city}, ${user.location.postcode}, ${user.nat}</div>\
+                    <div>${user.location.street}, ${user.location.city}, ${user.location.postcode}, ${user.nat}</div>
                     <div>Birthday:  ${d[1]}/${d[2]}/${d[0]}</div>
                     <hr/>
                     <div><span class="previous">&larr; previous     |</span>
