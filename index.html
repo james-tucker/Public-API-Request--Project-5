@@ -1,27 +1,36 @@
 <!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-	<title>Employee Directory</title>
-  <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="css/style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Awesome Startup - Employee Directory</title>
 </head>
+
 <body>
-  <div class="container">
-    <div class="page-title">
-      Awesome Employee startup directory
-      <span class="search-box"></span>
+    <div class="screen">
+        <div class="container">
+
+            <h1 class="heading">AWESOME STARTUP EMPLOYEE DIRECTORY</h1>
+            <form id="search_box">
+                <input type="text" name="search_box" placeholder="Search...">
+            </form>
+            <div id="card_container">
+                <!-- dynamically updated with api content -->
+            </div>
+        </div>
     </div>
-    <div class="users">Loading...</div>
-  </div>
+    <div class="modal_screen" id="modal_screen">
+        <div class="modal_container" id="modal_container">
+            <!-- dynamically updated with clicked card content -->
+        </div>
 
-  <div id="myModal" class="modal">
+    </div>
 
-  <div class="modal-content">
-
-  </div>
-
-  </div>
-  <script src="js/app.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="js/app.js"></script>
 </body>
+
 </html>
