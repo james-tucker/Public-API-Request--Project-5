@@ -1,223 +1,182 @@
-! function() { // mvc
+//Ajax request
 
-    const $cardContainer = $('#card_container');
-    const $modalScreen = $('#modal_screen'); // this fills the whole viewing port 
-    const $modalContainer = $('#modal_container')
-    let employeeList = {}; // list contains the returned object from the API
-    let activeList = {}; // the list that is currently active - will be employeeList by default, 
-    let searchList = {} // searchList to narrow down employees when user is searching
-    let modalWindowIndex = 0; // the current index of the employee selected in the modal window
+$.ajax({
+	/// Make AJAX request to get 12 employee profiles in json format
+ 	url: 'https://randomuser.me/api/?results=12',
+  	dataType: 'json',
 
-    // function to capitalize first letter and letters after spaces of a given string
-    function capitalizeString(str) {
+	success: function(data) {
 
-        // change the first letter to a capital
-        let capStr = str.charAt(0).toUpperCase() + str.substring(1);
+  		let users = data.results;
 
-        // for each space, the next letter should be capitalized, 
-        // so split into separate snippets wherever ' ' is found, 
-        // capitalize each first letter of each snippet, 
-        // and join the string together again with ' '
-        capStr = capStr.split(' ')
-            .map(snippet => {
-                snippet = snippet.charAt(0).toUpperCase() + snippet.substring(1);
-                return snippet;
-            })
-            .join(' ');
+//Random employee info
 
-        return capStr;
-    } // end capitalizeString()
+  		// Open ul tag
+  		var cards = `<ul id="users" style="list-style: none;">
+  					<div id="header">
+  						<h2>AWESOME STARTUP EMPLOYEE DIRECTORY</h2>
+  						<input id="searchBar" type="text" class="form-control col-md-2" name="searchBox" placeholder="Filter by name or username...">
+  					</div>`;
+  		var i = 0;
 
-    function showNames(list) {
-        $cardContainer.html(''); // make sure the screen is cleared 
+  		// Iterate over all employee profiles 
+  		$.each(users, function( index, value ) {
+  		 	
+  		 	//Build cards displaying correct information for each of them stored in individual list items
+	  		cards  +=  `<li class="card" id="${i++}">
+	  		 			<img class ="image" src="${users[index].picture.large}"> 
+	  		 			 <div class="info">
+			  		 		<p class= "fullName propper-noun"><i>${users[index].name.first} ${users[index].name.last}</i></p>
+			  		 		<p ><i>${users[index].login.username}</i></p>
+		  		 			<p class="propper-noun">${users[index].location.city}, ${users[index].nat}</p>
+		  		 		 </div>
+		  		 	    </li>`;	
+  		});
 
-        let htmlString = '<ul>';
-        // cycle through each employee, building the html to show the employee cards
-        for (employee in list) {
+  		//Close ul tag
+  		cards += "</ul>";
+  		//and dynamically add HTML to document 
+    	$("#profiles").html(cards);
 
-            htmlString += '<li class="card"><div class="card_img_container">';
-            htmlString += `<img class="card_icon" src=${list[employee].picture.large} alt="${list[employee].picture.large}"></div>`;
+//Modal window
 
-            // prepare the capitalized first and last name of the employee
-            let employeeName = list[employee].name.first + ' ' + list[employee].name.last;
-            employeeName = capitalizeString(employeeName);
+		//Build and append overlay to dim screen when modal is displayed (hidden by default using css)
+		var overlay = $('<div id="overlay">');
+		$("body").append(overlay)
 
-            htmlString += `<div class="card_details"><h2 class="card_name">${employeeName}</h2>`;
-            htmlString += `<p class="card_email">${list[employee].email}</p>`;
+		 //Function to run when employee card is clicked
+		 $('.card').on("click", function (e) {
+		 	//Parse card's id attribute from string to number
+		 	var thisCard =  parseInt($(this).attr('id'));
+ 	
+		 	//Function to build modal 
+		 	function updateModal(cardToShow) {
+		 	$("#modal").html(`<div class="modal-image">
+	  		 			 			<img src="${users[cardToShow].picture.large}"> 
+	  		 			 	  </div>
+	  		 			 	  <div class = "modal-info">
+			 					  <p class="propper-noun fullName">${users[cardToShow].name.first}  ${users[cardToShow].name.last}</p>
+			 					  <p>${users[cardToShow].email}</p>
+			 					  <p class="propper-noun">${users[cardToShow].location.city}</p>
+			 					  <hr>
+			 					  <p>${users[cardToShow].phone}</p>
+			 					  <div id="address">
+				 						<p class="propper-noun">${users[cardToShow].location.street}</p>
+				 						<p class="propper-noun">${users[cardToShow].location.city}</p>
+				 						<p class="propper-noun">${users[cardToShow].location.state}</p> 
+				 						<p>${users[cardToShow].location.postcode}</p>		 						
+				 				  </div>
+				 				  <p>Birthday: ${users[cardToShow].dob}</p>
+				 				  <div id="arrows">
+					 				  <a href="#" class="fa prev" id="prev" >&#xf060;</a>&nbsp&nbsp&nbsp<a href="#"  class="fa next" id="next">&#xf061;</a>	
+					 			  </div>	  
+		 					  </div>`);
+			}
+			 // Run updateModel function to build modal (correct index value taken from clicked card's id attribute)
+			 updateModal(thisCard);
+			 // Display modal
+			 $("#modal").slideDown();
+			 // Display overlay
+			 overlay.show();
 
-            // capitalize the city's name
-            let cityCapitalized = capitalizeString(list[employee].location.city);
-            htmlString += `<p class="card_city">${cityCapitalized}</p></div></li>`;
-        } // end for
-        htmlString += '</ul>';
+//Browse Modals
 
-        $cardContainer.html(htmlString); // update the html page
+			// When 'next' button is clicked
+			$("#modal").on('click', '#next', function () {
+				// As long as modal shown ISN'T 12/12
+				if  (thisCard !== users.length-1) {
+					// Add 1 to index value
+					thisCard ++;
+					updateModal(thisCard);	
+				// If modal shown IS 12/12		
+				} else {
+					// Reset index value to 0
+					thisCard = 0;
+					// Update Modal to show correct information
+					updateModal(thisCard);			 
+				}	
+			});
 
-    } // end showNames()
+			// As above
+			$("#modal").on('click', '#prev', function () {  
+				if (thisCard !== 0)	{	
+					thisCard --;
+					updateModal(thisCard);	
+				} else {
+					thisCard = users.length-1;
+					updateModal(thisCard)
+				}							 
+			}); 	
 
-    // this function expects a date of birth in the format provided by the API
-    // example: 1983-07-14 07:29:45
-    // it returns a numerical date of birth in the format mm-dd-yy
-    function formatBirthday(dob) {
-        let formattedDOB = dob.substring(5, 7) + '/' + dob.substring(8, 10) + '/' + dob.substring(2, 4);
-        return formattedDOB;
-    }
 
-    // shows the modal screen according with info according to a given index in the 
-    // employeeList
-    function showModalScreen(index) {
+			//Same functionality for when left and right keys are pressed
+		 	$(document).keyup(function(e) {
+		 		if (e.keyCode == 39) { 
+					if  (thisCard !== users.length-1) {
+						thisCard ++;
+						updateModal(thisCard);	
+					} else {0
+						thisCard = 0;
+						updateModal(thisCard);			 
+					}	
+				}	
+			});
 
-        $modalContainer.html('');
+			$(document).keyup(function(e) {  
+				if (e.keyCode == 37) { 
+					if (thisCard !== 0)	{	
+						thisCard --;
+						updateModal(thisCard);	
+					} else {
+						thisCard = users.length-1;
+						updateModal(thisCard)
+					}
+				}							 
+			}); 
+		 });	
+		
+//Exit Modal 
 
-        let employee = activeList[index];
-        let htmlString = '<span class="modal_exit_button">X</span>';
-        htmlString += '<span class="modal_prev_button">\<</span>';
-        htmlString += '<span class="modal_next_button">\></span>';
+		// When overlay is clicked
+		overlay.click(function(){
+			// Hide the overlay
+			overlay.hide();
+			// Hide the modal
+			$("#modal").hide();
+		});
 
-        htmlString += `<img class="modal_icon" src=${employee.picture.large} alt=${employee.picture.large}>`;
+		// When Escape key is pressed
+		$(document).keyup(function(e) {
+	    	 if (e.keyCode == 27) { 
+		     	// Hide the overlay
+		     	overlay.hide();
+				// Hide the modal
+				$("#modal").hide();
+    		}
+		});
 
-        // prepare the capitalized first and last name of the employee
-        let employeeName = employee.name.first + ' ' + employee.name.last;
-        employeeName = capitalizeString(employeeName);
+//Seach Bar
 
-        htmlString += `<h2 class="modal_name">${employeeName}</h2>`;
-        htmlString += `<p class="modal_email">${employee.email}</p>`;
+		var search = function() {
 
-        // capitalize the city's name
-        let cityCapitalized = capitalizeString(employee.location.city);
-        htmlString += `<p class="modal_city">${cityCapitalized}</p>`;
-        htmlString += `<p class="modal_line">______________________________________________________________________________________________________</p>`;
-        htmlString += `<p class="modal_telephone">${employee.cell}</p>`;
+			// Declare variables
+		   var filter = $('#searchBar').val().toLowerCase();
+		   var li = $("#profiles li");
 
-        let address = `${employee.location.street}, ${employee.location.state}, ${employee.location.postcode}`;
-        address = capitalizeString(address);
-        htmlString += `<p class="modal_address">${address}</p>`;
+		   // Loop through all list items, and hide those who don't match the search query
+		    for (i = 0; i < li.length; i++) {
+		        var seachItemsName = li[i].getElementsByTagName("i")[0];
+		        var seachItemsUser = li[i].getElementsByTagName("i")[1];
+		        if ((seachItemsName.innerHTML.toLowerCase().indexOf(filter) > -1) || (seachItemsUser.innerHTML.toLowerCase().indexOf(filter) > -1)) {
+		            li[i].style.display = "";
+		        } else {
+		            li[i].style.display = "none";
+		        }
+		    }
+		}
 
-        let birthday = formatBirthday(employee.dob);
-        htmlString += `<p class="modal_birthday">Birthday: ${birthday}</p>`;
+		// Run search function on keyup of search bar input
+		$('#searchBar').on('keyup', search);
 
-        $modalContainer.html(htmlString); // update the html page
-
-        $modalScreen.show();
-    } // end showModalScreen()
-
-    function search(str) {
-        activeList = {}; // clear the activeList of employees
-        let counter = 0;
-        // cycle through the employeeList and find matches
-        // add these matches to the active list
-        for (var employee in employeeList) {
-            // search should be available on first name, last name, and username
-            let fullName = employeeList[employee].name.first + ' ' + employeeList[employee].name.last;
-            fullName += ' ' + employeeList[employee].login.username;
-            fullName = fullName.toLowerCase();
-            if (fullName.includes(str.toLowerCase())) {
-                activeList[counter] = employeeList[employee];
-                counter++;
-            }
-        }
-        showNames(activeList);
-    }
-
-    function getInitialEmployees() {
-
-        // retrieve 12 names using the randomuser.me api
-        // send a query to retrieve 12 results
-        // only from countries with a Latin-character alphabet
-        $.get('https://randomuser.me/api/', { results: 12, nat: "au,br,ca,ch,de,dk,es,fi,fr,gb,ie,nl,nz,us" }, (results) => {
-            employeeList = results.results; // save the retrieved list of employees
-            activeList = employeeList; // make this list the active list 
-            showNames(activeList);
-
-        }); // end $.get()
-    } // end getInitialEmployees()
-
-    // INITIAL SETUP
-
-    getInitialEmployees();
-
-    // EVENT HANDLERS
-
-    $cardContainer.on('click', (event) => {
-        const $clicked = $(event.target);
-        // if any of the elements in a specific li is clicked:
-        if ($clicked.is('li') || $clicked.parents().is('li')) {
-
-            // find the index of the card clicked
-            if ($clicked.is('li')) { // the card itself was clicked, not an element on it
-                modalWindowIndex = $clicked.index();
-            } else { // one of the child elements was clicked - find the parent <li>
-                modalWindowIndex = $clicked.parents('li').index();
-            }
-            // show the modal screen with info from the clicked index
-            showModalScreen(modalWindowIndex);
-        }
-    })
-
-    function decreaseModalWindowIndex() {
-        modalWindowIndex -= 1;
-        if (modalWindowIndex < 0) {
-            // assign the modalWindowIndex to the last object number in the list
-            // the number of employees is the number of keys in the object
-            // Object.keys(object) returns an array, so we can call length on it
-            modalWindowIndex = Object.keys(activeList).length - 1;
-        }
-    }
-
-    function increaseModalWindowIndex() {
-        modalWindowIndex += 1;
-        if (modalWindowIndex > Object.keys(activeList).length - 1) {
-            modalWindowIndex = 0;
-        }
-    }
-
-    // event handler for when modal screen is showing
-    $modalScreen.on('click', (event) => {
-        const $clicked = $(event.target);
-        if ($clicked.is('#modal_container') || $clicked.parents().is('#modal_container')) {
-            if ($clicked.is('.modal_exit_button')) {
-                $modalScreen.hide();
-            }
-            if ($clicked.is('.modal_prev_button')) {
-                decreaseModalWindowIndex();
-                showModalScreen(modalWindowIndex);
-            } // as above, check when past beginning of list, so too check if past end of list
-            if ($clicked.is('.modal_next_button')) {
-                increaseModalWindowIndex();
-                showModalScreen(modalWindowIndex);
-            }
-        } else {
-            // the grayed out area around the modal container box has been clicked
-            $modalScreen.hide();
-        }
-    });
-
-    // this event handler checks to see if the right or left arrow is pressed
-    // if the modal window is open, the previous or next card is shown
-    $(window).keydown((event) => {
-
-        if ($modalScreen.is(':visible')) { // check to see if the modal window is showing
-            // check to see if the left arrow was pressed
-            if (event.key === 'ArrowLeft' && $modalScreen.is(':visible')) {
-                decreaseModalWindowIndex();
-                showModalScreen(modalWindowIndex);
-            } // check for the right arrow
-            if (event.key === 'ArrowRight') {
-                increaseModalWindowIndex();
-                showModalScreen(modalWindowIndex);
-
-            }
-        }
-    });
-
-    // event handler for searches
-    $('#search_box').on('input', (event) => {
-        searchString = $(event.target).val(); // retrieve value from search box
-        if (searchString === '') { // the user deleted everything in the search box
-            activeList = employeeList;
-            showNames(activeList);
-        } else { // the user added something to the search list
-            search(searchString);
-        }
-    });
-}();
+  	}	
+});
