@@ -14,11 +14,9 @@ html, body {
 }
 
 body {
-		/* Font changed to Dosis*/
-    font-family: 'Dosis', sans-serif;
+    font-family: 'Yatra One', sans-serif;
     text-align: center;
-		/* background-color changed to #007B76 */
-    background: #007B76;
+    background: #696969;
 }
 
 header {
@@ -31,27 +29,22 @@ header {
 }
 
 header h1 {
-		/* font changed to Staatliches*/
-		font-family: 'Staatliches', cursive;
+		font-family: 'Ubuntu', bold;
     font-size: 1.25em;
-		/* color changed to white*/
     color: white;
     margin-top: 35px;
 }
 
 .search-input {
     padding: 0.4rem 1rem;
-		/*changed border color*/
     border: 1px solid black;
     border-radius: 0.25rem 0 0 0.25rem ;
     max-width: 20rem;
-		/*increased speed*/
     transition: .1s ease-out;
     outline: none;
 }
 
 .search-input:active, .search-input:hover, .search-input:focus {
-	  /*changed border width, color*/
     border: 2px solid black;
 }
 
@@ -60,23 +53,16 @@ header h1 {
     height: 33px;
     background: rgba(245, 245, 245, 0.9);
     border-radius: 0 0.25rem 0.25rem 0;
-		/*changed border color*/
     border: 1px solid black;
-		/*increased speed*/
     transition: .1s ease-out;
     outline: none;
 }
 
 .search-submit:active, .search-submit:hover, .search-submit:focus {
     background: rgba(255, 255, 255, 0.9);
-		/*changed border width, color*/
     border: 2px solid black;
 }
 
-
-/* =====================================
-   Gallery
-======================================== */
 
 .gallery {
     display: flex;
@@ -98,14 +84,11 @@ header h1 {
     max-width: 360px;
     margin: 10px 10px 20px;
     padding: 10px;
-		/* Background changed */
     background: white;
     border-radius: 0.25em;
-		/* Border changed */
     border: 1px solid black;
     transition: .4s ease-out;
     overflow: hidden;
-		/* Box-shadow added*/
 		-webkit-box-shadow: 2px 11px 25px -7px rgba(0,0,0,0.6);
 		-moz-box-shadow: 2px 11px 25px -7px rgba(0,0,0,0.6);
 		box-shadow: 2px 11px 25px -7px rgba(0,0,0,0.6);
@@ -115,7 +98,6 @@ header h1 {
     width: 95px;
     margin: 10px 15px auto 10px;
     border-radius: 50%;
-		/* added border */
 		border: 2px solid black;
 }
 
@@ -139,9 +121,7 @@ header h1 {
 }
 
 
-/* =====================================
-   Modal
-======================================== */
+
 
 .modal-container {
     position: fixed;
@@ -161,8 +141,7 @@ header h1 {
     padding-bottom: 15px;
     background: rgba(255, 255, 255, 1);
     border-radius: 0.25em;
-		/* Border changed */
-    border: 3px solid #007B76;
+    border: 3px solid #000000;
     transition: .4s ease-out;
 }
 
@@ -172,8 +151,7 @@ header h1 {
     right: 15px;
     cursor: pointer;
     color: rgba(255, 255, 255, 0.9);
-		/* Background changed */
-    background: #007B76;
+    background: #696969;
     outline: none;
     border-radius: 0.25em;
     border: 1px solid rgba(50, 50, 50, 0.3);
@@ -183,7 +161,7 @@ header h1 {
     width: 150px;
     margin-top: 35px;
     border-radius: 50%;
-		border: 3px solid #007B76;
+		border: 3px solid #000000;
 }
 
 .modal-name {
@@ -193,14 +171,12 @@ header h1 {
 .modal-text {
     color: rgba(50, 50, 50, 0.7);
     margin: 10px;
-		/* Capitalize */
 		text-transform: capitalize;
 }
 
 .modal hr {
     width: 75%;
     margin: 25px auto 30px;
-		/* Border changed */
     border-color: black;
 }
 
@@ -215,8 +191,7 @@ header h1 {
     margin: 10px auto auto;
     background: rgba(255, 255, 255, 1);
     border-radius: 0.25em;
-		/* Border changed */
-    border: 3px solid #007B76;
+    border: 3px solid #000000;
 }
 
 
@@ -227,12 +202,10 @@ header h1 {
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.9);
     padding: 0.75em 1.5em;
-		/* Background changed */
-    background: #007B76;
+    background: #696969;
     border-radius: 0.35em;
     transition: .4s ease-out;
     outline: none;
-		/* Border added */
 		border: 2px solid black;
   }
 
